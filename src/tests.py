@@ -5,6 +5,8 @@ from src.widget import get_date
 from src.processing import filter_by_state
 from src.processing import sort_by_date
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
+from src.decorators import log
+
 
 print(mask_account_card("Visa Platinum 7000792289606361"))
 print(mask_account_card("Visa Classic 6831982476737658"))
@@ -145,3 +147,12 @@ print(
 
 result = list(card_number_generator(2, 5))
 print(result)
+
+
+
+@log()
+def successful_function(x, y):
+    return x + y
+
+successful_function(1,3)
+
