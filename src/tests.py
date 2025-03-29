@@ -6,7 +6,7 @@ from src.processing import filter_by_state
 from src.processing import sort_by_date
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 from src.decorators import log
-from src.utils import load_transactions,convert_transaction_to_rub
+from src.utils import load_transactions, convert_transaction_to_rub
 
 
 print(mask_account_card("Visa Platinum 7000792289606361"))
@@ -171,5 +171,3 @@ print(
         },
     )
 )
-
-

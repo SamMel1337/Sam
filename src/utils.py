@@ -3,10 +3,12 @@ import os
 import requests
 from dotenv import load_dotenv
 import logging
+
 load_dotenv()  # Загружаем переменные окружения из .env
 API_KEY = os.getenv("EXCHANGE_API_KEY")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
 
 def load_transactions(bar=None):
     """Загружает транзакции из JSON-файла."""
@@ -24,9 +26,8 @@ def load_transactions(bar=None):
             return []
 
 
-
-
 BASE_URL = "https://api.apilayer.com/exchangerates_data"
+
 
 def convert_transaction_to_rub(transaction: dict) -> float:
 
@@ -35,25 +36,25 @@ def convert_transaction_to_rub(transaction: dict) -> float:
     currency_code = transaction["operationAmount"]["currency"]["code"]
 
     # URL для запроса курса обмена
-    url = f'https://api.apilayer.com/exchangerates_data/latest?base={currency_code}&symbols=RUB'
+    url = f"https://api.apilayer.com/exchangerates_data/latest?base={currency_code}&symbols=RUB"
 
     # Заголовки для аутентификации
-    headers = {
-        'apikey': API_KEY
-    }
+    headers = {"apikey": API_KEY}
 
     # Выполняем запрос к API
     response = requests.get(url, headers=headers)
 
     # Проверяем статус ответа
     if currency_code == "RUB":
+        logging.info(f"Валюта ОК")
         return amount
     elif response.status_code == 200:
         data = response.json()
         # Получаем курс обмена
-        exchange_rate = data['rates']['RUB']
+        exchange_rate = data["rates"]["RUB"]
         amount_in_rub = amount * exchange_rate
+        logging.info(f"Валюта ОКK")
         return f"Сумма в рублях: {amount_in_rub:.2f} RUB"
     else:
+        logging.error(f"НЕ ОКК")
         return f"Ошибка при получении данных обмена:", {response.status_code}
-
