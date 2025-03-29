@@ -1,6 +1,7 @@
 # Настройка логирования
 from functools import wraps
 
+
 def log(function=None):
     """
     Декоратор для логирования выполнения функций.

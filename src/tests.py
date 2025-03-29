@@ -6,6 +6,7 @@ from src.processing import filter_by_state
 from src.processing import sort_by_date
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 from src.decorators import log
+from src.utils import load_transactions,convert_transaction_to_rub
 
 
 print(mask_account_card("Visa Platinum 7000792289606361"))
@@ -149,10 +150,26 @@ result = list(card_number_generator(2, 5))
 print(result)
 
 
-
 @log()
 def successful_function(x, y):
     return x + y
 
-successful_function(1,3)
+
+successful_function(1, 3)
+
+print(load_transactions("../data/operations.json"))
+print(
+    convert_transaction_to_rub(
+        {
+            "id": 41428829,
+            "state": "EXECUTED",
+            "date": "2019-07-03T18:35:29.512364",
+            "operationAmount": {"amount": "8221.37", "currency": {"name": "USD", "code": "USD"}},
+            "description": "Перевод организации",
+            "from": "MasterCard 7158300734726758",
+            "to": "Счет 35383033474447895560",
+        },
+    )
+)
+
 
