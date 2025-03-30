@@ -1,6 +1,7 @@
 import logging
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, filename="../logs.log", format="%(asctime)s - %(message)s")
+
 # лицевой счет
 def get_mask_account(personal_account: int) -> str:
     """Функция маскировки номера счета"""

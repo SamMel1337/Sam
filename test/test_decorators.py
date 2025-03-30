@@ -42,7 +42,7 @@ def test_log_to_file(tmp_path):
     test_function(5, 7)
 
     # Проверяем содержание файла
-    with open(log_file, 'r') as f:
+    with open(log_file, "r") as f:
         logs = f.read()
 
     assert "test_function ok" in logs
