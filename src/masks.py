@@ -1,6 +1,10 @@
 import logging
 
-logging.basicConfig(level=logging.INFO, filename="../logs.log", format="%(asctime)s - %(message)s")
+logger = logging.getLogger(__name__)
+file_handler = logging.FileHandler("../logs/logs.log")
+logger.addHandler(file_handler)
+logger.setLevel(logging.DEBUG)
+
 
 # лицевой счет
 def get_mask_account(personal_account: int) -> str:

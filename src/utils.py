@@ -10,51 +10,41 @@ API_KEY = os.getenv("EXCHANGE_API_KEY")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 
-def load_transactions(bar=None):
+def load_transactions(bar: str = None) -> list[dict]:
     """Загружает транзакции из JSON-файла."""
-    with open(bar, "r", encoding="utf-8") as file:
-        try:
-            if bar:
-                data = json.load(file)
-                logging.info(data)
-                return data
-            else:
-                logging.info("пустой список")
-                return []
-        except Exception:
-            logging.error("пустой список")
-            return []
-
-
-BASE_URL = "https://api.apilayer.com/exchangerates_data"
+    try:
+        with open(bar, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            logging.info(data)
+            return data
+    except FileNotFoundError:
+        logging.error("Файл не найден")
+        return []
+    except Exception:
+        logging.error("Непредвиденная ошибка")
+        return []
 
 
 def convert_transaction_to_rub(transaction: dict) -> float:
-
-    # Получаем сумму и валюту из словаря
+    """
+    DOCSTRING!
+    """
     amount = float(transaction["operationAmount"]["amount"])
     currency_code = transaction["operationAmount"]["currency"]["code"]
 
-    # URL для запроса курса обмена
-    url = f"https://api.apilayer.com/exchangerates_data/latest?base={currency_code}&symbols=RUB"
-
-    # Заголовки для аутентификации
-    headers = {"apikey": API_KEY}
-
-    # Выполняем запрос к API
-    response = requests.get(url, headers=headers)
-
-    # Проверяем статус ответа
     if currency_code == "RUB":
-        logging.info(f"Валюта ОК")
-        return amount
-    elif response.status_code == 200:
-        data = response.json()
-        # Получаем курс обмена
-        exchange_rate = data["rates"]["RUB"]
-        amount_in_rub = amount * exchange_rate
-        logging.info(f"Валюта ОКK")
-        return f"Сумма в рублях: {amount_in_rub:.2f} RUB"
+        logging.info("Валюта ОК")
+        return float(amount)
     else:
-        logging.error(f"НЕ ОКК")
-        return f"Ошибка при получении данных обмена:", {response.status_code}
+        headers = {"apikey": API_KEY}
+        url = f"https://api.apilayer.com/exchangerates_data/latest?base={currency_code}&symbols=RUB"
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            exchange_rate = data["rates"]["RUB"]
+            amount_in_rub = amount * exchange_rate
+            logging.info("Валюта ОКK")
+            return float(amount_in_rub)
+        else:
+            logging.error("НЕ ОКК")
+            raise ValueError("При запросе произошла ошибка")
