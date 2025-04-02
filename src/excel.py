@@ -1,11 +1,11 @@
 import csv
 import pandas as pd
 
-
+"""Преобразование в таблицу"""
 def tabl_nreg(ter="../data/transactions.csv"):
     list_dict = []
     with open(ter, "r", encoding="utf-8") as f:
-        reader = csv.reader(f, delimiter=",")
+        reader = csv.reader(f, delimiter=";")
         for row in reader:
             list_dict.append(row)
         return list_dict
