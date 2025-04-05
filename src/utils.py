@@ -4,7 +4,7 @@ import requests
 from dotenv import load_dotenv
 import logging
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler("../logs.log")
+file_handler = logging.FileHandler("../logs.log",encoding="utf-8")
 logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
 
@@ -16,13 +16,13 @@ def load_transactions(bar: str = None) -> list[dict]:
     try:
         with open(bar, "r", encoding="utf-8") as file:
             data = json.load(file)
-            logging.info(data)
+            logger.info(data)
             return data
     except FileNotFoundError:
-        logging.error("Файл не найден")
+        logger.error("Файл не найден")
         return []
     except Exception:
-        logging.error("Непредвиденная ошибка")
+        logger.error("Непредвиденная ошибка")
         return []
 
 
@@ -34,7 +34,7 @@ def convert_transaction_to_rub(transaction: dict) -> float:
     currency_code = transaction["operationAmount"]["currency"]["code"]
 
     if currency_code == "RUB":
-        logging.info("Валюта ОК")
+        logger.info("Валюта ОК")
         return float(amount)
     else:
         headers = {"apikey": API_KEY}
@@ -44,9 +44,9 @@ def convert_transaction_to_rub(transaction: dict) -> float:
             data = response.json()
             exchange_rate = data["rates"]["RUB"]
             amount_in_rub = amount * exchange_rate
-            logging.info("Валюта ОКK")
+            logger.info("Валюта ОКK")
             return float(amount_in_rub)
         else:
-            logging.error("НЕ ОКК")
+            logger.error("НЕ ОКК")
             raise ValueError("При запросе произошла ошибка")
 
