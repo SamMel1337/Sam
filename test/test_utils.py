@@ -61,27 +61,19 @@ def test_load_transactions_logging(caplog):
             assert "пустой список" not in caplog.text
             assert str(test_data) in caplog.text
 
+
 def test_convert_transaction_to_rub_success():
     # Тестовые данные
-    transaction = {
-        "operationAmount": {
-            "amount": 100,
-            "currency": {
-                "code": "USD"
-            }
-        }
-    }
+    transaction = {"operationAmount": {"amount": 100, "currency": {"code": "USD"}}}
 
     # Мокируем ответ от API
     mock_response_data = {
-        "rates": {
-            "RUB": 75.0  # Предположим, что курс USD к RUB равен 75
-        },
+        "rates": {"RUB": 75.0},  # Предположим, что курс USD к RUB равен 75
         "base": "USD",
-        "date": "2023-10-01"
+        "date": "2023-10-01",
     }
 
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         # Настраиваем мок для возврата нужного ответа
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = mock_response_data
@@ -90,33 +82,25 @@ def test_convert_transaction_to_rub_success():
 
         # Проверяем, что запрос был выполнен с правильным URL и заголовками
         mock_get.assert_called_once_with(
-            f"https://api.apilayer.com/exchangerates_data/latest?base=USD&symbols=RUB",
-            headers={"apikey": API_KEY}
+            f"https://api.apilayer.com/exchangerates_data/latest?base=USD&symbols=RUB", headers={"apikey": API_KEY}
         )
 
         # Проверяем результат конвертации
         assert result == "Сумма в рублях: 7500.00 RUB"
+
+
 def test_convert_transaction_to_rub_success():
     # Тестовые данные
-    transaction = {
-        "operationAmount": {
-            "amount": 100,
-            "currency": {
-                "code": "USD"
-            }
-        }
-    }
+    transaction = {"operationAmount": {"amount": 100, "currency": {"code": "USD"}}}
 
     # Мокируем ответ от API
     mock_response_data = {
-        "rates": {
-            "RUB": 75.0  # Предположим, что курс USD к RUB равен 75
-        },
+        "rates": {"RUB": 75.0},  # Предположим, что курс USD к RUB равен 75
         "base": "USD",
-        "date": "2023-10-01"
+        "date": "2023-10-01",
     }
 
-    with patch('requests.get') as mock_get:
+    with patch("requests.get") as mock_get:
         # Настраиваем мок для возврата нужного ответа
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = mock_response_data
@@ -125,8 +109,7 @@ def test_convert_transaction_to_rub_success():
 
         # Проверяем, что запрос был выполнен с правильным URL и заголовками
         mock_get.assert_called_once_with(
-            f"https://api.apilayer.com/exchangerates_data/latest?base=USD&symbols=RUB",
-            headers={"apikey": API_KEY}
+            f"https://api.apilayer.com/exchangerates_data/latest?base=USD&symbols=RUB", headers={"apikey": API_KEY}
         )
 
         # Проверяем результат конвертации

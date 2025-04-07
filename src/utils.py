@@ -3,13 +3,15 @@ import os
 import requests
 from dotenv import load_dotenv
 import logging
+
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler("../logs.log",encoding="utf-8")
+file_handler = logging.FileHandler("../logs.log", encoding="utf-8")
 logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
 
 load_dotenv()  # Загружаем переменные окружения из .env
 API_KEY = os.getenv("EXCHANGE_API_KEY")
+
 
 def load_transactions(bar: str = None) -> list[dict]:
     """Загружает транзакции из JSON-файла."""
@@ -49,4 +51,3 @@ def convert_transaction_to_rub(transaction: dict) -> float:
         else:
             logger.error("НЕ ОКК")
             raise ValueError("При запросе произошла ошибка")
-
